@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <title>Trump WAR!</title>
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css'>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css'>
+    <link rel='stylesheet' type='text/css' href='./css/style.css'>
+    <script src='https://code.jquery.com/jquery-2.1.4.min.js'></script>
+    <script src='/vendor.js'></script>
+    <script src='/logic.js'></script>
+    <style type="text/css" media="all">
+      body { margin-top: 30px; }
+    </style>
+  </head>
+  <body>
+    <input type="button" value="ゲーム開始" id="gameStart">
+    <input type="button" value="ルールを見る" id="showRule">
+    <div id="overlay"></div>
+    <div id="modalWindow" style="overflow:scroll;">
+      <p>概要</p>
+      <p>2人のプレイヤーで、トランプを赤と黒にわけて5×5マスのフィールド上につなげ配置していく。全ての札を出し切ったときによりフィールド上に多くの札を置いていたプレイヤーの勝ち。</p>
+      <p>始め方</p>
+      <p>トランプを赤と黒に分けそれぞれ26枚と1枚ずつのジョーカーを含んだ計27枚の山札を用意しよくきる。</p>
+      <p>5×5マスのフィールド上の手前側の一行の5マス（自陣という）に山札の上から5枚並べ、さらに手札として5枚を引く。</p>
+      <p>相手も同じように用意して先攻後攻を決める。自分のターンになったとき、プレイヤーは山札の上からカードを1枚ひく（前の相手のターンに自分のフィールド上のジャック、クイーン、キングのカードが取られた場合はカードを引くことはできない）</p>
+      <p>カードのナンバー</p>
+      <p>ジョーカー以外のカードは1ー10のナンバーが割り当てられる。1ー9のカードはそのカーの数字がナンバーとされる。</p>
+      <p>10は5、11は1、12は2、13は3のナンバーになる。ジョーカーはどんなナンバーとして扱っても良いが、ジョーカー以外のカードでは取ることができない。</p>
+      <p>カードの置き方</p>
+      <p>自分のターンには必ず手札からカードを1枚フィールドに置く。</p>
+      <p>カードは自分のカードが置かれた場所か自分のカードに隣接する空きマスにしか置くことができない。</p>
+      <p>空白のマスに置く置き方は3パターンある</p>
+      <p>1　隣接する自分のカードとのナンバーの和が10になるナンバーをもつカード</p>
+      <p>2　自分のカードに隣接する空きマスで空きマスに隣接する相手のカードとのナンバーの和が10になる</p>
+      <p>3　自分のジョーカーに隣接する空きマス（この場合置くカードのナンバーは問われない）</p>
+      <p>また、自陣から自分のカードで繋がっているマスに置かれている自分のカードには手札のカードから好きなカードを代わりに置くことができる。このとき、置いたマスに隣接するマスに置かれた相手のカードのナンバーと新たに置いたカードのナンバーの和が10になる場合は相手のカードを取ることができる。</p>
+      <p>ジョーカーの置き方</p>
+      <p>ジョーカーは自分のカードが隣接する空きマスに置くことができる。また自分のカードが置かれたマスにそのカードの代わりに置くことができる。</p>
+      <p>ジョーカーを置いたとき、置いたマスに隣接するマスに相手カードがある場合は1枚に限り取ることができる（ジョーカーであっても取ることができる）。</p>
+      <p>勝ち負け</p>
+      <p>２人のプレイヤーがすべての手札を使いきったときにフィールドにより多くのカードを置けているプレイヤーが勝者となる。</p>
+      <p>自陣のカードがなくなり、かつフィールド上の空白のマスに手札から置けるカードがなくなった場合はその時点で負けてなる。</p>
+      <p>相手によって合計6枚の役カード（ジャック、クイーン、キング）が取られた場合も負けとなる。</p>
+      <p>フィールドから除かれたカード</p>
+      <p>相手によって取られたカードおよび自分のカードとの取り替えが行われたカードについては裏返しにしておく。</p>
+      <input type="button" value="閉じる" id="hideRule">
+    </div>
+
+
+    <div class="disp">
+      <table id="tehuda2">
+        <thead>
+          <tr>
+            <th colspan="10">Player2の手札</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="tehuda2-1"></td>
+            <td id="tehuda2-2"></td>
+            <td id="tehuda2-3"></td>
+            <td id="tehuda2-4"></td>
+            <td id="tehuda2-5"></td>
+            <td id="tehuda2-6"></td>
+            <td id="tehuda2-7"></td>
+            <td id="tehuda2-8"></td>
+            <td id="tehuda2-9"></td>
+            <td id="tehuda2-10"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table id="field">
+        <tr>
+          <td id="field1-1"></td>
+          <td id="field1-2"></td>
+          <td id="field1-3"></td>
+          <td id="field1-4"></td>
+          <td id="field1-5"></td>
+        </tr>
+        <tr>
+          <td id="field2-1"></td>
+          <td id="field2-2"></td>
+          <td id="field2-3"></td>
+          <td id="field2-4"></td>
+          <td id="field2-5"></td>
+        </tr>
+        <tr>
+          <td id="field3-1"></td>
+          <td id="field3-2"></td>
+          <td id="field3-3"></td>
+          <td id="field3-4"></td>
+          <td id="field3-5"></td>
+        </tr>
+        <tr>
+          <td id="field4-1"></td>
+          <td id="field4-2"></td>
+          <td id="field4-3"></td>
+          <td id="field4-4"></td>
+          <td id="field4-5"></td>
+        </tr>
+        <tr>
+          <td id="field5-1"></td>
+          <td id="field5-2"></td>
+          <td id="field5-3"></td>
+          <td id="field5-4"></td>
+          <td id="field5-5"></td>
+        </tr>
+      </table>
+
+      <table id="tehuda1">
+        <thead>
+          <tr>
+            <th colspan="10">Player1の手札</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="tehuda1-1"></td>
+            <td id="tehuda1-2"></td>
+            <td id="tehuda1-3"></td>
+            <td id="tehuda1-4"></td>
+            <td id="tehuda1-5"></td>
+            <td id="tehuda1-6"></td>
+            <td id="tehuda1-7"></td>
+            <td id="tehuda1-8"></td>
+            <td id="tehuda1-9"></td>
+            <td id="tehuda1-10"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <input type="button" value="Player1のターンです" id="button_player1">
+      <input type="button" value="Player2のターンです" id="button_player2">
+      <input type="button" value="パス(Player1)" id="pass_player1">
+      <input type="button" value="パス(Player2)" id="pass_player2">
+    </div>
+  </body>
+</html>
